@@ -1,0 +1,97 @@
+alias mongostart="launchctl start homebrew.mxcl.mongodb"
+alias mongostop="launchctl stop homebrew.mxcl.mongodb"
+alias n='node'
+# git shortcuts
+alias gs='git status'
+alias gl='git log --graph --pretty=format:"%Cred%h%Creset — %s %Cgreen(%cr)<%an>%Creset" --abbrev-commit --date=relative'
+alias ga='git add .'
+alias gp='git push'
+alias gpl='git pull'
+alias gf='git fetch'
+alias ll='ls -al'
+alias l='ls'
+alias gba='git branch -a'
+alias gb='git branch'
+alias grh='git reset --hard HEAD'
+# virtual envs
+alias pyweb_env='source ~/dev/virtualenvs/PYWEB/bin/activate'
+alias bapi_env='source ~/dev/virtualenvs/BAPI/bin/activate'
+
+export projdir=/Users/thinkt4nk/dev/projects
+# PATH
+export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/sbin:$PATH
+export PATH=/Users/thinkt4nk/dev/scripts:$PATH
+export PATH=/usr/local/Cellar/php54/5.4.16/bin:$PATH
+PATH="$(brew --prefix josegonzalez/php/php54)/bin:$PATH"
+export PATH=/Users/thinkt4nk/dev/scripts/bonfyre:$PATH
+export PATH=/Users/thinkt4nk/dev/lib/RDSCli-1.15.001/bin:$PATH
+
+# PIP
+export PIP_HOME=/Library/Python/2.7/site-packages
+
+# AWS
+export AWS_RDS_HOME=/Users/thinkt4nk/dev/lib/RDSCli-1.15.001
+export AWS_CREDENTIAL_FILE=/Users/thinkt4nk/awscreds
+
+# Java
+export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+
+# Node
+source /Users/thinkt4nk/.nvm/nvm.sh
+nvm use 0.11
+alias node='node --harmony'
+export NODE_PATH=`npm root -g`
+
+### Colors definition ###
+BLACK="\[\033[0;30m\]"
+DARK_GRAY="\[\033[1;30m\]"
+LIGHT_GRAY="\[\033[0;37m\]"
+BLUE="\[\033[0;34m\]"
+LIGHT_BLUE="\[\033[1;34m\]"
+GREEN="\[\033[0;32m\]"
+LIGHT_GREEN="\[\033[1;32m\]"
+CYAN="\[\033[0;36m\]"
+LIGHT_CYAN="\[\033[1;36m\]"
+RED="\[\033[0;31m\]"
+LIGHT_RED="\[\033[1;31m\]"
+PURPLE="\[\033[0;35m\]"
+LIGHT_PURPLE="\[\033[1;35m\]"
+BROWN="\[\033[0;33m\]"
+YELLOW="\[\033[1;33m\]"
+WHITE="\[\033[1;37m\]"
+DEFAULT_COLOR="\[\033[00m\]"
+RED_BOLD="\[\033[01;31m\]"
+GREEN="\[\033[0;32m\]"
+
+
+### Git && SVN ###
+#Get git information
+parse_git_branch () {
+       git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+#Get svn information
+##Get svn url
+parse_svn_url() {
+       svn info 2>/dev/null | sed -ne 's#^URL: ##p'
+}
+##Get svn repository root
+parse_svn_repository_root() {
+       svn info 2>/dev/null | sed -ne 's#^Repository Root: ##p'
+}
+##Get svn revision 
+parse_svn_current_revision() {
+       svn info 2>/dev/null | sed -ne 's#^Revision: ##p'
+}
+##Parse everything and return the svn general info
+parse_svn_branch_revision() {
+   parse_svn_url | sed -e 's#^'"$(parse_svn_repository_root)"'##g' | awk -F / '{print $1 "/" $2 }' | awk '{print " (svn::_@" $1 ")" } ' | sed -e 's#_@#'"$(parse_svn_current_revision)"':#g'    
+}
+
+## Prompt ##
+#export PS1="$DEFAULT_COLOR[$LIGHT_CYAN\u@\h$BLUE $YELLOW\w$LIGHT_PURPLE\$(parse_git_branch)$DEFAULT_COLOR]\n$GREEN#$DEFAULT_COLOR "
+export PS1="$DEFAULT_COLOR[$LIGHT_CYAN\u@\h$BLUE $YELLOW\w$LIGHT_PURPLE\$(parse_git_branch)$DEFAULT_COLOR]\n$GREEN λ$DEFAULT_COLOR "
+#function _update_ps1() {
+#    export PS1="$(~/.powerline-shell.py $?)"
+#}
+#export PROMPT_COMMAND="_update_ps1"
